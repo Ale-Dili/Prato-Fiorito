@@ -5,32 +5,69 @@
  */
 package prato;
 
+import java.util.*;
+
 /**
  *
  * @author Alessandro
  */
 public class Bombs {
-    
+
     private Bomb[] bombs;
-    
+
     private int nBombs;
 
     public Bombs() {
-        this.nBombs = 6;       
-        initBombs();
+        this.nBombs = 6;
         
+        bombs = new Bomb[nBombs];
+        
+        for (int i = 0; i < nBombs; i++) {
+            bombs[i]= new Bomb();
+        }
+        setBombs();
     }
-    
-    public void initBombs(){
-        for(int i=0; i<nBombs; i++){
-            
-            int id=5; //metodo random che genera posizione
-            bombs[i]= new Bomb(id);
+
+    public void setBombs() {
+
+        int id;
+
+        for (int i = 0; i < nBombs; i++) {
+
+            id = (int) ((Math.random() *35 ) + 1);  //numero righe*colonne
+
+            for (int j = 0; j < nBombs; j++) {
+                if (id != bombs[j].getId()) {
+                } else {
+                    id = (int) ((Math.random() * nBombs) + 1);
+                    j = 0;
+                }
+            }
+            System.out.println(id);
+            bombs[i].setId(id);
         }
     }
 
+    public Bomb[] getBombs() {
+        return bombs;
+    }
 
+    public int getnBombs() {
+        return nBombs;
+    }
+
+    public void setBombs(Bomb[] bombs) {
+        this.bombs = bombs;
+    }
+
+    public void setnBombs(int nBombs) {
+        this.nBombs = nBombs;
+    }
+    
+    public int  getIdBomb(int i){
+        return bombs[i].getId();
+    }
     
     
-    
+
 }

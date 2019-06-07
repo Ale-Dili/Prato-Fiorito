@@ -15,9 +15,9 @@ public class Bomb {
     
     private boolean tF;  //indica se e' esplosa o no;
 
-    public Bomb(int id) {
+    public Bomb() {
         this.tF = false;
-        this.id = id;
+        this.id = -1;
     }
     
     
