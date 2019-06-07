@@ -17,12 +17,18 @@ public class Prato extends PApplet{
     /**
      * @param args the command line arguments
      */
+    private static int numColonne=7;
+    private static int numRighe=5;
+
+    
     public static void main(String[] args) {
-        // TODO code application logic here
+        
+        
+        PApplet.main(new String[]{"prato.Prato"});
     }
     
     public void settings() {
-        size(140, 100 );                                       
+        size(350, 250);                                       
     }
 
     public void setup() {
@@ -31,36 +37,37 @@ public class Prato extends PApplet{
     }
 
 
-     */
+     
     public void draw() {
         background(119, 136, 153);
-        for (int i = 0; i < (int) (ptrDati.getAltS() / 150); i++) {          // i --> sono righe (coordinata Y)
-            for (int ii = 0; ii < (int) (ptrDati.getLungS() / 150); ii++) {  // ii --> sono colonne (coordinata X)
-                int id = ii + (ptrDati.getNumColonne() * i);      // id = colonnaCorrente+(numeroDelleColonne * rigaCorrente)
-                drawBoxPixel(id, ii * 150, i * 150);
+        for (int i = 0; i < (int) (250 / 50); i++) {          // i --> sono righe (coordinata Y)
+            for (int ii = 0; ii < (int) (350 / 50); ii++) {  // ii --> sono colonne (coordinata X)
+                int id = ii + (numColonne * i);      // id = colonnaCorrente+(numeroDelleColonne * rigaCorrente)
+                drawBoxPixel(id, ii * 50, i * 50);
                 
  
-                if((ptrDati.getInclinazioneY()>10) || (ptrDati.getInclinazioneY()<-10)) {                    
+               /* if((ptrDati.getInclinazioneY()>10) || (ptrDati.getInclinazioneY()<-10)) {                    
                     ptrDati.signalPallina();
                 }
+                */
                 
-                
-                
+                /*
                 if (array[id].isBallTF()) {
                     drawBall(id);
                 }
+               */
             }
         }
 
     }
 
-
+   
     public void drawBoxPixel(int id, int colonnaPosX, int rigaPosY) {
         stroke(0, 0, 0);
 
-        rect(colonnaPosX, rigaPosY, array[id].getLungB(), array[id].getAltB());
+        rect(colonnaPosX, rigaPosY, 50, 50);
 
-        if (ptrDati.getInclinazioneY() >= 0) {
+        /*if (ptrDati.getInclinazioneY() >= 0) {
             colonnaPosX = colonnaPosX + array[id].getLungB() - 2;
             for (int i = 0; i < array[id].valueSandPixel(); i++) {
                 noStroke();
@@ -78,17 +85,17 @@ public class Prato extends PApplet{
                 colonnaPosX++;
             }
 
-        }
+        }*/
         stroke(0, 0, 0);
         noFill();
     }
 
-
+/*
     public void drawBall(int id) {
         fill(color(255, 0, 0));
         stroke(0, 0, 0);
         ellipse(array[id].getBall().getPosX(), array[id].getBall().getPosY(), array[id].getBall().getRaggio(), array[id].getBall().getRaggio());
         noFill();
     }
-    
+    */
 }
