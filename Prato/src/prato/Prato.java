@@ -39,7 +39,7 @@ public class Prato extends PApplet{
 
      
     public void draw() {
-        background(119, 136, 153);
+        background(211,211,211);
         for (int i = 0; i < (int) (250 / 50); i++) {          // i --> sono righe (coordinata Y)
             for (int ii = 0; ii < (int) (350 / 50); ii++) {  // ii --> sono colonne (coordinata X)
                 int id = ii + (numColonne * i);      // id = colonnaCorrente+(numeroDelleColonne * rigaCorrente)
