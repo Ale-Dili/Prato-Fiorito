@@ -16,9 +16,18 @@ public class Bombs {
     private Bomb[] bombs;
 
     private int nBombs;
+    
+    //numero colonne della griglia
+    private int numColonne;
+    
+    //numero righe della griglia
+    private int numRighe;
 
-    public Bombs() {
-        this.nBombs = 6;
+    public Bombs(int numColonne, int numRighe) {
+        this.nBombs = 7;
+        this.numColonne=numColonne;
+        this.numRighe=numRighe;
+        
         
         bombs = new Bomb[nBombs];
         
@@ -34,7 +43,7 @@ public class Bombs {
 
         for (int i = 0; i < nBombs; i++) {
 
-            id = (int) ((Math.random() *35 ) + 1);  //numero righe*colonne
+            id = (int) ((Math.random() *(numRighe*numColonne) ) + 1);  //numero righe*colonne
 
             for (int j = 0; j < nBombs; j++) {
                 if (id != bombs[j].getId()) {
