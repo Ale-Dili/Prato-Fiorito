@@ -23,17 +23,23 @@ public class Prato extends PApplet {
 
     private static Bombs bombs;
 
+    private static Calcoli calcoli;
+
+    private static BoxState boxState;
+
     public static void main(String[] args) {
-        numColonne = 7;
-        numRighe = 5;
+        numColonne = 9;
+        numRighe = 6;
 
         bombs = new Bombs(numColonne, numRighe);
+        calcoli = new Calcoli(numColonne, numRighe);
+        boxState = new BoxState(numColonne, numRighe);
 
         PApplet.main(new String[]{"prato.Prato"});
     }
 
     public void settings() {
-        size(numColonne*50, numRighe*50);
+        size(numColonne * 50, numRighe * 50);
     }
 
     public void setup() {
@@ -100,7 +106,8 @@ public class Prato extends PApplet {
 
     }
 
-    public void mouseClicked() {
+    //evento mouse click
+    public void mousePressed() {
         int colonna = mouseX;
         int riga = mouseY;
 
@@ -112,52 +119,204 @@ public class Prato extends PApplet {
         System.out.println(mouseX + ", " + mouseY);
         System.out.println("strokes: " + id);
 
-        stroke(colonna, riga);
+        if (mouseButton == LEFT) {
+            stroke(colonna, riga);
+            check(id);
+        }
 
-        checkBomb(id);
-        
-        clean(id);
+        if (mouseButton == RIGHT) {
+
+            mark(colonna, riga, id);
+        }
+
+        //  clean();
     }
 
+    //metodo che scava nella cella selezionata
     public void stroke(int colonna, int riga) {
         fill(158, 89, 3);
         stroke(0, 0, 0);
         rect((colonna - 1) * 50, (riga - 1) * 50, 50, 50);
     }
 
+    public void mark(int colonna, int riga, int id) {
+        //se e' true vuol dire che e' rossa
+        if (boxState.isBoxId(id)) {
+            
+            fill(211, 211, 211);
+            stroke(0, 0, 0);
+            rect((colonna - 1) * 50, (riga - 1) * 50, 50, 50);
+            boxState.setFalse(id);
+            
+        } else {
+            
+            fill(255, 0, 0);
+            stroke(0, 0, 0);
+            rect((colonna - 1) * 50, (riga - 1) * 50, 50, 50);
+            boxState.setTrue(id);
+            
+        }
+    }
+
+    //controlla se nella cella premuta ce una bomba
     public void checkBomb(int id) {
         for (int i = 0; i < bombs.getnBombs(); i++) {
             if (id == bombs.getIdBomb(i)) {
-                stop();
+                //stop();
                 textSize(35);
                 fill(0, 102, 153);
 
-                text("HAI PERSO SFIGATO!", 5, 125);
-                fill(0, 102, 153);
+                text("HAI PERSO SFIGATO!", 5, 130);
+
             }
 
         }
     }
-    
-    public void clean(int id){
+
+    //controlla la cella e attorno a lei
+    public void check(int id) {
+        checkBomb(id);
+
+        int cont = 0;
+
         for (int i = 0; i < bombs.getnBombs(); i++) {
-            if(((id-1)!=bombs.getIdBomb(i))&&((id+1)!=bombs.getIdBomb(i))){   //controlla che a destra e a sinistra non ci siano bombe
-               if(((id-numColonne)!=bombs.getIdBomb(i))&&((id-numColonne-1)!=bombs.getIdBomb(i))&&((id-numColonne+1)!=bombs.getIdBomb(i))){ //controlla che i 3 quadrati sopra sono privi di bombe
-                   if(((id+numColonne)!=bombs.getIdBomb(i))&&((id+numColonne-1)!=bombs.getIdBomb(i))&&((id+numColonne+1)!=bombs.getIdBomb(i))){
-                       
-                   }
-               } 
+            if (checkSx(id, i)) {
+                cont++;
             }
+            if (checkDx(id, i)) {
+                cont++;
+            }
+
+            cont += checkUp(id, i);
+
+            cont += checkDown(id, i);
         }
+        textSize(30);
+        fill(0, 102, 153);
+        text(Integer.toString(cont), calcoli.calcColonna(calcoli.calcRiga(id), id) * 50 - 33, calcoli.calcRiga(id) * 50 - 12);
     }
 
+    //--------------------------------------CONTROLLO BOMBE------------------------
+    public boolean checkSx(int id, int i) {
 
-    /*
-    public void drawBall(int id) {
-        fill(color(255, 0, 0));
-        stroke(0, 0, 0);
-        ellipse(array[id].getBall().getPosX(), array[id].getBall().getPosY(), array[id].getBall().getRaggio(), array[id].getBall().getRaggio());
-        noFill();
+        if ((id - 1) % numColonne != 0) {
+            if ((id - 1) == bombs.getIdBomb(i)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
     }
-     */
+
+    public boolean checkDx(int id, int i) {
+        if ((id) % numColonne != 0) {
+            if ((id + 1) == bombs.getIdBomb(i)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+    }
+
+    public int checkUp(int id, int i) {
+
+        int riga = calcoli.calcRiga(id);
+        int colonna = calcoli.calcColonna(riga, id);
+        int bombCounter = 0;
+
+        if (riga == 1) {
+            return 0;
+        } else if (colonna == 1) {
+
+            if (id - numColonne == bombs.getIdBomb(i)) {
+                bombCounter++;
+            }
+
+            if (id - numColonne + 1 == bombs.getIdBomb(i)) {
+                bombCounter++;
+            }
+
+        } else if (colonna == numColonne) {
+
+            if (id - numColonne == bombs.getIdBomb(i)) {
+                bombCounter++;
+            }
+
+            if (id - numColonne - 1 == bombs.getIdBomb(i)) {
+                bombCounter++;
+            }
+
+        } else {
+
+            if (id - numColonne == bombs.getIdBomb(i)) {
+                bombCounter++;
+            }
+
+            if (id - numColonne - 1 == bombs.getIdBomb(i)) {
+                bombCounter++;
+            }
+
+            if (id - numColonne + 1 == bombs.getIdBomb(i)) {
+                bombCounter++;
+            }
+
+        }
+
+        return bombCounter;
+    }
+
+    public int checkDown(int id, int i) {
+
+        int riga = calcoli.calcRiga(id);
+        int colonna = calcoli.calcColonna(riga, id);
+        int bombCounter = 0;
+
+        if (riga == numRighe) {
+            return 0;
+        } else if (colonna == 1) {
+
+            if (id + numColonne == bombs.getIdBomb(i)) {
+                bombCounter++;
+            }
+
+            if (id + numColonne + 1 == bombs.getIdBomb(i)) {
+                bombCounter++;
+            }
+
+        } else if (colonna == numColonne) {
+
+            if (id + numColonne == bombs.getIdBomb(i)) {
+                bombCounter++;
+            }
+
+            if (id + numColonne - 1 == bombs.getIdBomb(i)) {
+                bombCounter++;
+            }
+
+        } else {
+
+            if (id + numColonne == bombs.getIdBomb(i)) {
+                bombCounter++;
+            }
+
+            if (id + numColonne - 1 == bombs.getIdBomb(i)) {
+                bombCounter++;
+            }
+
+            if (id + numColonne + 1 == bombs.getIdBomb(i)) {
+                bombCounter++;
+            }
+
+        }
+
+        return bombCounter;
+    }
+    //-------------------------------------------------------------------------------
+
 }
