@@ -24,7 +24,7 @@ public class Bombs {
     private int numRighe;
 
     public Bombs(int numColonne, int numRighe) {
-        this.nBombs = 7;
+        this.nBombs = 1;
         this.numColonne=numColonne;
         this.numRighe=numRighe;
         
